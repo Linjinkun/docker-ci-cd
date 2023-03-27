@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5.7.27
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_USER: ${GITEA_DB_USER:?err}
+      MYSQL_PASSWORD: ${GITEA_DB_PASSWD:?err}
+      MYSQL_DATABASE: ${GITEA_DB_NAME:?err}
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - gitea
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  gitea:
+    image: gitea/gitea:1
+    depends_on:
+      - mysql
+    environment:
+      USER_UID: ${GITEA_USER_UID:?err}
+      USER_GID: ${GITEA_USER_GID:?err}
+      DB_TYPE: ${GITEA_DB_TYPE:?err}
+      DB_HOST: ${GITEA_DB_HOST:?err}
+      DB_NAME: ${GITEA_DB_NAME:?err}
+      DB_USER: ${GITEA_DB_USER:?err}
+      DB_PASSWD: ${GITEA_DB_PASSWD:?err}
+    volumes:
+      - ./gitea-data:/data
+    ports:
+      - "222:22"
+      - "3000:3000"
+    networks:
+      - gitea
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  gitea:
+    driver: bridge
+
