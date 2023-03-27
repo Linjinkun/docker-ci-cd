@@ -9,10 +9,10 @@ services:
       - ./data/drone/:/var/lib/drone/
       - ./data/data/:/data/
     environment:
-      - DRONE_GITEA_SERVER=http://43.139.150.18:3000/
+      - DRONE_GITEA_SERVER=http://ip:3000/
       - DRONE_GITEA_CLIENT_ID=0be74b8c-89c1-4dab-8b78-44b7cc3973e2
       - DRONE_GITEA_CLIENT_SECRET=AxlmNln5izZjygZra0eBzyxPGW67xXOvFJC6mK9iPuel
-      - DRONE_SERVER_HOST=43.139.150.18:10003
+      - DRONE_SERVER_HOST=ip:10003
       - DRONE_SERVER_PROTO=http
       - DRONE_RPC_SECRET=e14c6c6a09a98ab4da1de05f5517b019
   drone-runner-docker:
