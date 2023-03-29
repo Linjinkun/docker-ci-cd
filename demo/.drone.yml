@@ -1,0 +1,10 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: busybox
+    image: busybox
+    commands:
+      - env
+      -  ping -c 10 www.baidu.com
