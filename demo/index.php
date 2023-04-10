@@ -8,7 +8,13 @@ $conn = new mysqli($servername, $username, $password);
 
 // 检测连接
 if ($conn->connect_error) {
-    die("连接失败: " . $conn->connect_error);
+    die("mysql连接失败: " . $conn->connect_error);
 }
-echo "连接成功";
+echo "mysql连接成功";
+
+echo "redis连接开始\n";
+$redis = new Redis();
+$redis->connect('redis', 6379);
+echo "Server is running: " . $redis->ping();
+
 ?>
