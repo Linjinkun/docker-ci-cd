@@ -8,3 +8,5 @@ fi
 # 创建 cicd 和 dnmp 目录
 mkdir /data/cicd
 mkdir /data/dnmp
+# 把文件移入指定目录
+cp -r drone/ gitea/ /data/cicd/
