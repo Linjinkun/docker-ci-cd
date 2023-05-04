@@ -50,31 +50,45 @@ services:
   drone-server:
     restart: always
     image: drone/drone:1
+    depends_on:
+      - gitea
     ports:
       - "10003:80"
     volumes:
-      - ./data/drone/:/var/lib/drone/
-      - ./data/data/:/data/
+      - ./drone-data-lib:/var/lib/drone/
+      - ./drone-data:/data/
     environment:
       - DRONE_GITEA_SERVER=${DRONE_GITEA_SERVER:?err}
       - DRONE_GITEA_CLIENT_ID=${DRONE_GITEA_CLIENT_ID:?err}
       - DRONE_GITEA_CLIENT_SECRET=${DRONE_GITEA_CLIENT_SECRET:?err}
       - DRONE_SERVER_HOST=gitea
-      - DRONE_SERVER_PROTO=http
+      - DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO:?err}
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET:?err}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"  
         
   drone-runner-docker:
     restart: always
     image: drone/drone-runner-docker:1
+    depends_on:
+      - drone-server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - DRONE_RPC_PROTO=http
+      - DRONE_RPC_PROTO=${DRONE_RPC_PROTO:?err}
       - DRONE_RPC_HOST=drone-server
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET:?err}
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 
 networks:
   cicd:
     driver: bridge
+    external: false
